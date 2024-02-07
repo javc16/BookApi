@@ -1,6 +1,8 @@
 using BookApi.DBContext;
 using BookApi.DBContext.Repository;
+using BookApi.Domain;
 using BookApi.Models;
+using BookApi.Services;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -18,6 +20,12 @@ builder.Services.AddDbContext<BookContext>(options
 
 //Repository
 builder.Services.AddTransient<IRepository<Book>, Repository<Book>>();
+
+//Register Services
+builder.Services.AddScoped<BookService>();
+
+//Register Domain
+builder.Services.AddScoped<BookDomain>();
 
 var app = builder.Build();
 
