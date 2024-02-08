@@ -9,6 +9,8 @@
         public const string Sucess = "Sucess";
         public const string Duplicated = "Duplicated!";
         public const string SucefullyRegister = "Sucefully Register";
+        public const string SucefullyUpdated = "Sucefully Updated";
+        public const string DeletedCorrectly = "Deleted Correctly";
 
 
     }

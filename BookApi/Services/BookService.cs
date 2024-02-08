@@ -3,9 +3,9 @@ using BookApi.Helpers;
 using BookApi.Models;
 using BookApi.Models.DTO;
 using BookApi.Constants;
-
-using System.Reflection.Metadata;
 using BookApi.Domain;
+using Microsoft.EntityFrameworkCore;
+
 
 namespace BookApi.Services
 {
@@ -56,7 +56,7 @@ namespace BookApi.Services
                 return Task.FromResult(new Response
                 {
                     Status = ConstantVariable.Failed,
-                    Message = $"{ConstantVariable.This} {ConstantVariable.Book} with id:{bookDTO.Name} {ConstantVariable.Duplicated}"
+                    Message = $"{ConstantVariable.This} {ConstantVariable.Book} with name:{bookDTO.Name} {ConstantVariable.Duplicated}"
                 });
             }
 
@@ -69,6 +69,33 @@ namespace BookApi.Services
                 Message = $"{ConstantVariable.This} {ConstantVariable.Book} {ConstantVariable.SucefullyRegister}",
                 Data = bookDTO
             });
+        }
+
+        public Task<Response> Put(int id, BookDTO bookDTO)
+        {
+            var book = BookDTO.FromDtoToModel(bookDTO);
+            book.Id = id;
+            _context.Update(book);
+            _context.SaveChanges();
+
+            return Task.FromResult(new Response
+            {
+                Status = ConstantVariable.Sucess,
+                Message = $"{ConstantVariable.This} {ConstantVariable.Book} {ConstantVariable.SucefullyUpdated}",
+                Data = bookDTO
+            });
+        }
+
+        public async Task<Response> Delete(int id)
+        {
+            var book = await _context.GetById(id);
+            if (book == null)
+            {
+                return "No have books with this id";
+            }
+            _context.Remove(book);
+            _context.SaveChanges();
+            return new Response { Message = $"{ConstantVariable.Book} with name:{book.Name} {ConstantVariable.DeletedCorrectly}" };
         }
     }
 }
